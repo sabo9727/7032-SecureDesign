@@ -1,7 +1,7 @@
 # 7032-SecureDesign
 
 # Practical Element Brief
-    A pharmaceutical company has hired you to develop a web-based application/software that enables
+A pharmaceutical company has hired you to develop a web-based application/software that enables
 the costumers to see the history of the medicines ordered using personal accounts, search and order
 new medicines, and update their medical record and prescriptions. The requirements for the system are
 as follows:
@@ -11,7 +11,7 @@ as follows:
     •Apply Formal Methods to different stages of the system development life cycle.
 
 # Practical Element Information
-    During the practical/lab sessions, you will be required to complete a set of workshops that will help you
+During the practical/lab sessions, you will be required to complete a set of workshops that will help you
 to familirise yourself with the tools and practices needed for the completion of the practical element,
 which covers all the learning outcomes. Your work will be marked using the provided grading rubric.
 Evidence for Practical Element
