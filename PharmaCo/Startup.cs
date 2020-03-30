@@ -7,11 +7,13 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using PharmaCo.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using PharmaCo.Services;
 
 namespace PharmaCo
 {
@@ -30,8 +32,20 @@ namespace PharmaCo
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
-            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+            services.AddDefaultIdentity<IdentityUser>(config =>             
+            {
+                config.SignIn.RequireConfirmedAccount = true;
+                config.Tokens.ProviderMap.Add("CustomEmailConfirmation",
+                    new TokenProviderDescriptor(
+                        typeof(CustomEmailConfirmationTokenProvider<IdentityUser>)));
+                config.Tokens.EmailConfirmationTokenProvider  = "CustomEmailConfirmation";
+            }).AddEntityFrameworkStores<ApplicationDbContext>();
+
+            services.AddTransient<CustomEmailConfirmationTokenProvider<IdentityUser>>();                
+            services.AddTransient<IEmailSender, EmailSender>();
+            services.Configure<AuthenticationMessageSenderOption>(Configuration);
+            services.Configure<DataProtectionTokenProviderOptions>(o =>
+            o.TokenLifespan = TimeSpan.FromHours(3));
             services.AddRazorPages();
         }
 
@@ -52,7 +66,7 @@ namespace PharmaCo
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
+            app.UseAuthentication();
             app.UseRouting();
 
             app.UseAuthentication();
